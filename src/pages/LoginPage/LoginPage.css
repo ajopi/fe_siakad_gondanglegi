@@ -1,0 +1,104 @@
+.containerLoginPage {
+    background-image: url('../../img/img-20180718-wa0011.jpg'), url(../../img/abstract-textured-backgound.jpg);
+    background-repeat: no-repeat, no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover, cover;
+    background-blend-mode: multiply;
+    height: 100vh;
+    width: 100vw;
+}
+
+.container_content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.title_login {
+    text-align: center;
+    color: rgba(248, 237, 255, 1);
+    font-family: 'Poppins';
+    font-size: 32px;
+    font-weight: bold;
+    margin: 12px 0px 12px 0px;
+}
+
+.container_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: rgba(248, 237, 255, 0.4);
+    border-radius: 12px;
+    width: 35%;
+
+    padding: 2rem 0rem 2rem 0rem;
+}
+
+.text1 {
+    font-family: 'Poppins';
+    font-weight: 300;
+    font-size: 28px;
+    text-align: center;
+
+    color: rgba(248, 237, 255, 1);
+}
+
+.text2 {
+    font-family: 'Poppins';
+    font-size: 12px;
+    text-align: center;
+
+    color: rgba(248, 237, 255, 1);
+}
+
+.form_group{
+    width: 70%;
+}
+
+.label_username {
+    margin-top: 12px;
+    font-family: 'Poppins';
+    font-size: 16px;
+    font-weight: normal;
+    color: rgba(248, 237, 255, 1);
+}
+
+.input_field {
+    width: 100%;
+    border: none;
+    border-radius: 6px;
+}
+
+.forgot_pass {
+    border: none;
+    background-color: transparent;
+    font-family: 'Poppins';
+    font-size: 16px;
+    font-weight: normal;
+    margin: 12px 0px 12px 0px;
+    color: rgba(248, 237, 255, 1);
+}
+
+.forgot_pass:hover{
+    color: black;
+}
+
+.btn_login{
+    width: 70%;
+    height: 35px;
+    border-radius: 6px;
+    border: none;
+    font-family: 'Poppins';
+    font-size: 16px;
+    font-weight: normal;
+    color: black;
+    background-color: #ffffff;
+}
+
+.btn_login:hover{
+    background-color: rgba(248, 237, 255, 1);
+}
