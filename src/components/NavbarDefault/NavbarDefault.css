@@ -1,0 +1,51 @@
+.container_navbar_default{
+    display: flex;
+    flex-direction: row;
+    background-color: rgba(153, 0, 0, 1);
+    padding: 12px;
+}
+
+.container_content_navbar1{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
+    /* background-color: aqua; */
+    width: 50%;
+}
+
+.logo_navbar{
+    height: 50px;
+    width: 50px;
+}
+
+.title_navbar{
+    font-family: 'Poppins';
+    font-size: 24px;
+    font-weight: bold;
+    color: rgba(248, 237, 255, 1);
+    margin: 0px 0px 0px 0px;
+}
+
+
+.container_content_navbar2{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    /* background-color: rgb(39, 108, 108); */
+    width: 50%;
+}
+.personpict{
+    height: 30px;
+    width: 30px;
+}
+.title_navbar_person{
+    font-family: 'Poppins';
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0px 0px 0px 0px;
+    color: rgba(248, 237, 255, 1);
+}

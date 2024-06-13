@@ -1,0 +1,33 @@
+.container_permohonansurat{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.container_page_and_sidebar{
+    display: flex;
+    position: relative;
+    /* flex-direction: row;
+    height: 100%;
+    position: relative; */
+}
+
+.container_sidebar_permohonansurat{
+    /* display: flex;
+    flex-direction: column; */
+    width: 20%;
+    height: 100%;
+    /* background-color: aquamarine; */
+    /* position: fixed; */
+    /* z-index: 1; */
+}
+
+.container_content_permohonansurat{
+    display: flex;
+    flex-direction: column;
+    background-color: azure;
+    width: 80%;
+    position: relative;
+    /* left: 20%; */
+    height: 2000px;
+}

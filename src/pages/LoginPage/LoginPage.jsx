@@ -3,6 +3,7 @@ import './LoginPage.css'
 import Logo from '../../img/favicon-1 1.png'
 
 const LoginPage = () => {
+
   return (
     <div className='containerLoginPage'>
       <div className='container_content'>
@@ -16,15 +17,15 @@ const LoginPage = () => {
           <p className='text2'> Login menggunakan akun yang sudah anda miliki</p>
 
           <form className='form_group'>
-            <label for='username' className='label_username'>Username</label><br />
+            <label htmlFor='username' className='label_username'>Username</label><br />
             <input type='text' id='username' className='input_field'/><br />
 
-            <label for='password' className='label_username'>Password</label><br />
+            <label htmlFor='password' className='label_username'>Password</label><br />
             <input type='password' id='password' className='input_field' /><br />
           </form>
 
           <button className='forgot_pass'>lupa password?</button>
-          <button className='btn_login'>Login</button>
+          <button className='btn_login' >Login</button>
         </div>
       </div>
 
