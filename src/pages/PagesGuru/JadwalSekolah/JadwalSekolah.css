@@ -1,0 +1,20 @@
+.container_jadwalsekolah{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+
+.container_sidebar_jadwalsekolah {
+    width: 20%;
+    align-content: center;
+}
+
+
+.container_content_jadwalsekolah {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 240, 251);
+    width: 80%;
+    padding: 60px 140px 20px 60px;
+}

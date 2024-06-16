@@ -1,0 +1,63 @@
+.container_form_permohonan_surat{
+    display: flex;
+    flex-direction: column;
+}
+
+.label_form_permohonan_surat{
+    font-family: 'Poppins';
+    font-weight: bold;
+}
+
+.input_form_permohonan_surat{
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 600px;
+    margin-bottom: 16px;
+    padding: 6px;
+}
+
+.input_form_permohonan_surat::placeholder{
+    font-family: 'Poppins';
+    font-weight: normal;
+    color: rgba(191, 207, 231, 1);
+}
+
+.container_date_time_form_permohonan_surat{
+    display: flex;
+    flex-direction: row;
+    width: 600px;
+    justify-content: flex-start;
+    gap: 16px;
+}
+
+.container_tanggal_mulai{
+    display: flex;
+    flex-direction: column;
+}
+
+.container_tanggal_selesai{
+    display: flex;
+    flex-direction: column;
+}
+
+.input_date_form_permohonan_surat{
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    padding: 6px;
+}
+
+.input_date_form_permohonan_surat::placeholder{
+    font-family: 'Poppins';
+    font-weight: normal;
+    color: rgba(191, 207, 231, 1);
+}
+
+.container_button_submit{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 600px;
+    margin-top: 16px;
+}
+

@@ -1,33 +1,62 @@
-.container_permohonansurat{
+.container_permohonansurat {
     display: flex;
     flex-direction: column;
     height: 100vh;
 }
 
-.container_page_and_sidebar{
+.container_page_and_sidebar {
     display: flex;
-    position: relative;
-    /* flex-direction: row;
     height: 100%;
-    position: relative; */
+    /* position: relative; */
 }
 
-.container_sidebar_permohonansurat{
-    /* display: flex;
-    flex-direction: column; */
+.container_sidebar_permohonansurat {
     width: 20%;
-    height: 100%;
-    /* background-color: aquamarine; */
-    /* position: fixed; */
-    /* z-index: 1; */
+    align-content: center;
 }
 
-.container_content_permohonansurat{
+.container_content_permohonansurat {
     display: flex;
     flex-direction: column;
-    background-color: azure;
+    background-color: rgb(255, 240, 251);
     width: 80%;
-    position: relative;
-    /* left: 20%; */
-    height: 2000px;
+    padding: 60px 140px 20px 60px;
+}
+
+.container_wrapper_permohonansurat{
+    display: flex;
+    flex-direction: column;
+    background-color: aliceblue;
+    gap: 60px;
+}
+
+
+table {
+    /* background-color: aqua; */
+    border-collapse: collapse;
+    border: 1px solid black;
+    padding: 12px;
+}
+
+th {
+    background-color: rgba(191, 207, 231, 1);
+    color: rgb(0, 0, 0);
+    text-transform: uppercase;
+    font-family: 'Poppins';
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+td, th {
+    padding: 8px;
+    border: 1px solid black;
+}
+
+table, th {
+    text-align: center;
+}
+
+td {
+    text-align: left;
 }
