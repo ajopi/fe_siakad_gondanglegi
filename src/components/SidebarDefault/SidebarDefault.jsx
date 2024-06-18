@@ -1,5 +1,6 @@
 import React from 'react'
 import { SidebarDataGuru } from './SidebarDataGuru'
+import { SidebarDataAdmin } from './SidebarDataAdmin'
 import './SidebarDefault.css'
 
 const SidebarDefault = () => {

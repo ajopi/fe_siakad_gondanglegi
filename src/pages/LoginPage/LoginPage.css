@@ -56,11 +56,14 @@
 }
 
 .form_group{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     width: 70%;
 }
 
 .label_username {
-    margin-top: 12px;
+    /* margin-top: 12px; */
     font-family: 'Poppins';
     font-size: 16px;
     font-weight: normal;
@@ -69,6 +72,7 @@
 
 .input_field {
     width: 100%;
+    padding: 10px;
     border: none;
     border-radius: 6px;
 }
@@ -79,7 +83,7 @@
     font-family: 'Poppins';
     font-size: 16px;
     font-weight: normal;
-    margin: 12px 0px 12px 0px;
+    /* margin: 12px 0px 12px 0px; */
     color: rgba(248, 237, 255, 1);
 }
 
@@ -88,7 +92,7 @@
 }
 
 .btn_login{
-    width: 70%;
+    /* width: 70%; */
     height: 35px;
     border-radius: 6px;
     border: none;
