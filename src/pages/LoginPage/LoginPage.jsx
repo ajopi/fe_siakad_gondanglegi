@@ -13,13 +13,19 @@ const LoginPage = () => {
 
   console.log(username);
   console.log(password);
+  const accessLvl = parseInt(sessionStorage.getItem("accessLevel"));
 
   const handleLogin = (e) => {
     e.preventDefault();
     try {
       authServices.loginUser(username, password).then(() => {
         console.log("login success!");
-        navigate("/permohonan-surat");
+
+        if (accessLvl === 1) {
+          navigate("/permohonan-surat");
+        } else {
+          navigate("/kelola-aktivitas-admin");
+        }
       })
     } catch (error) {
       alert(error.message);

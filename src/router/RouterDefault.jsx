@@ -20,12 +20,13 @@ const RouterDefault = () => {
                     <Route path="/permohonan-surat" element={<PermohonanSurat />} />
                     <Route path="/jadwal-sekolah" element={<JadwalSekolah />} />
                     <Route path="/penilaian-guru" element={<PenilaianGuru />} />
+
+                    <Route path="/kelola-aktivitas-admin" element={<Aktivitas />} />
+                    <Route path="/kelola-data-guru" element={<KelolaDataGuru />} />
+                    <Route path="/kelola-data-siswa" element={<KelolaDataSiswa />} />
+                    <Route path="/kelola-surat-guru" element={<KelolaSuratGuru />} />
                 </Route>
 
-                <Route path="/kelola-aktivitas-admin" element={<Aktivitas />} />
-                <Route path="/kelola-data-guru" element={<KelolaDataGuru />} />
-                <Route path="/kelola-data-siswa" element={<KelolaDataSiswa />} />
-                <Route path="/kelola-surat-guru" element={<KelolaSuratGuru />} />
             </Routes>
         </BrowserRouter>
     )

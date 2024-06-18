@@ -1,0 +1,28 @@
+.container_aktivitas_admin {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+
+
+.container_sidebar_aktivitas_admin {
+    width: 20%;
+    align-content: center;
+}
+
+
+.container_content_aktivitas_admin {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 240, 251);
+    width: 80%;
+    padding: 60px 140px 20px 60px;
+}
+
+.container_wrapper_aktivitas_admin{
+    display: flex;
+    flex-direction: column;
+    background-color: aliceblue;
+    gap: 60px;
+}

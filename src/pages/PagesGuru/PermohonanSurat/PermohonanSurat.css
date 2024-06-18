@@ -4,10 +4,10 @@
     height: 100vh;
 }
 
+/* public className */
 .container_page_and_sidebar {
     display: flex;
     height: 100%;
-    /* position: relative; */
 }
 
 .container_sidebar_permohonansurat {

@@ -19,14 +19,17 @@ const loginUser = (username, password) => {
 
     return axios.request(config)
         .then((response) => {
-            console.log(response.data.user);
-            // const idUser = sessionStorage.getItem('userId');
+            // console.log(response.data.user);
+        
+
+            sessionStorage.setItem('accessLevel', response.data.user.access_level)
             sessionStorage.setItem('token', response.data.token);
             sessionStorage.setItem('userId', JSON.stringify(response.data.user.id));
-            
+
         })
         .catch((error) => {
             console.log(error);
+            alert("login gagal")
         });
 }
 

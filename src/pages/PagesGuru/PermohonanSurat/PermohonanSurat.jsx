@@ -4,7 +4,6 @@ import './PermohonanSurat.css'
 import SidebarDefault from '../../../components/SidebarDefault/SidebarDefault'
 import FormPermohonanSurat from '../../../components/FormPermohonanSurat/FormPermohonanSurat'
 import TitlePageAndButton from '../../../components/TitlePageAndButton/TitlePageAndButton'
-import { SidebarDataGuru } from '../../../components/SidebarDefault/SidebarDataGuru'
 
 const PermohonanSurat = () => {
     const [clicked, setClicked] = useState(0);
