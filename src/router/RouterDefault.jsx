@@ -26,7 +26,6 @@ const RouterDefault = () => {
                     <Route path="/kelola-data-siswa" element={<KelolaDataSiswa />} />
                     <Route path="/kelola-surat-guru" element={<KelolaSuratGuru />} />
                 </Route>
-
             </Routes>
         </BrowserRouter>
     )

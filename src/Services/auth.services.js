@@ -33,9 +33,32 @@ const logoutUser = () => {
 
 }
 
+const handleDeleteSurat = (id) => {
+    const token = sessionStorage.getItem('token');
+    let config = {
+        method: 'delete',
+        maxBodyLength: Infinity,
+        url: `${process.env.REACT_APP_BASE_URL}/api/v1/dinas/${id}/delete`,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'x-access-token': token
+        }
+    };
+
+    axios.request(config)
+        .then((response) => {
+            console.log(response.data);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+
 const authServices = {
     loginUser,
-    logoutUser
+    logoutUser,
+    handleDeleteSurat
 }
 
 export default authServices

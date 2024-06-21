@@ -1,4 +1,4 @@
-.container_jadwalsekolah{
+.container_jadwalsekolah {
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -8,13 +8,25 @@
 .container_sidebar_jadwalsekolah {
     width: 20%;
     align-content: center;
+    border-right: 1px solid rgb(223, 223, 223);
 }
 
 
 .container_content_jadwalsekolah {
     display: flex;
     flex-direction: column;
-    background-color: rgb(255, 240, 251);
+    background-color: rgb(247, 247, 247);
     width: 80%;
-    padding: 60px 140px 20px 60px;
+    padding: 30px 140px 20px 60px;
+}
+
+.container_wrapper_jadwalSekolah {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    gap: 30px;
+
+    padding: 12px;
+    border-radius: 12px;
 }

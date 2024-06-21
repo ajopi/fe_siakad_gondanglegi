@@ -12,6 +12,8 @@ import { Button, TablePagination, Paper, TableRow, TableHead, TableContainer, Ta
 // MUI ICONS
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ConfirmationDialog from '../../../components/ConfirmationDialog/ConfirmationDialog'
+import authServices from '../../../Services/auth.services'
 
 const PermohonanSurat = () => {
     // handle button click create surat 
@@ -36,7 +38,8 @@ const PermohonanSurat = () => {
         {
             id: 'status',
             label: 'Status',
-            width: '30%'
+            width: '30%',
+            align: 'center'
         },
         {
             id: 'action',
@@ -47,7 +50,7 @@ const PermohonanSurat = () => {
     ];
     const [rows, setRows] = useState([]);
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     //===============================USEEFFECT untuk get data dari API===============================
     useEffect(() => {
@@ -71,8 +74,9 @@ const PermohonanSurat = () => {
                 const data = response.data.dinas.map((value, index) => ({
                     no: index + 1,
                     tujuan: value.keperluan,
-                    status: value.validation ? "Done" : "Pending"
-                }))
+                    status: value.validation ? "Done" : "Pending",
+                    id: value.id
+                }));
                 setRows(data);
             })
             .catch((error) => {
@@ -90,12 +94,39 @@ const PermohonanSurat = () => {
         setPage(0);
     };
 
+
+    // MODAL DIALOG
+    const [open, setOpen] = useState(false);
+    const [dataSuratId, setDataSuratId] = useState(null);
+
+    const handleOpen = (e) => {
+        setDataSuratId(e);
+
+        setOpen(true);
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    }
+
+
+
+
     const handleEdit = () => {
         console.log('button clicked');
     }
 
-    const handleDelete = () => {
-        console.log('button clicked');
+    // function untuk menghapus data surat by id
+    const handleDelete = (e) => {
+        e.preventDefault();
+        console.log("button clicked");
+        try {
+            authServices.handleDeleteSurat(dataSuratId);
+            setOpen(false);
+            window.location.reload();
+        } catch (error) {
+            alert(error.message)
+        }
     }
 
 
@@ -153,8 +184,9 @@ const PermohonanSurat = () => {
                                                                         startIcon={<DeleteIcon />}
                                                                         variant="contained"
                                                                         color="secondary"
-                                                                        onClick={handleDelete}
+                                                                        onClick={() => { handleOpen(row.id) }}
                                                                     >
+                                                                        {console.log(dataSuratId)}
                                                                         Delete
                                                                     </Button>
                                                                 </>
@@ -171,13 +203,20 @@ const PermohonanSurat = () => {
                         </Table>
                     </TableContainer>
                     <TablePagination
-                        rowsPerPageOptions={[10, 25, 100]}
+                        rowsPerPageOptions={[5, 10, 25, 100]}
                         component="div"
                         count={rows.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
                         onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                    <ConfirmationDialog
+                        open={open}
+                        onClose={handleClose}
+                        onConfirm={handleDelete}
+                        dialogTitle={"Konfirmasi Hapus!!"}
+                        dialogContent={"Apakah anda yakin ingin menghapus data ini?"}
                     />
                 </Paper >
 
