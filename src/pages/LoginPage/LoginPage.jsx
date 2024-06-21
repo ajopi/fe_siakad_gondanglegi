@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './LoginPage.css'
 import Logo from '../../img/favicon-1 1.png'
 import { useNavigate } from 'react-router-dom'
@@ -13,17 +13,17 @@ const LoginPage = () => {
 
   console.log(username);
   console.log(password);
-  const accessLvl = parseInt(sessionStorage.getItem("accessLevel"));
 
   const handleLogin = (e) => {
     e.preventDefault();
     try {
       authServices.loginUser(username, password).then(() => {
         console.log("login success!");
+        const access_level = parseInt(sessionStorage.getItem("accessLevel"));
 
-        if (accessLvl === 1) {
+        if (access_level === 1) {
           navigate("/permohonan-surat");
-        } else {
+        } else if (access_level === 0) {
           navigate("/kelola-aktivitas-admin");
         }
       })
