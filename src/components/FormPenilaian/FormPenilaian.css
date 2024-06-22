@@ -1,6 +1,12 @@
 .container_form_penilaian {
     display: flex;
     flex-direction: column;
+
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 12px;
+    width: 600px;
 }
 
 .label_form_penilaian {
@@ -8,14 +14,14 @@
     font-weight: bold;
 }
 
-.option_form_penilaian{
+.option_form_penilaian {
     font-family: 'Poppins';
 }
 
 .input_form_penilaian {
     border: 1px solid black;
     border-radius: 10px;
-    width: 600px;
+    width: 100%;
     margin-bottom: 16px;
     padding: 6px 6px 6px 12px;
 }
@@ -26,9 +32,9 @@
     color: rgba(191, 207, 231, 1);
 }
 
-.container_button_form_penilaian{
+.container_button_form_penilaian {
     display: flex;
-    width: 600px;
+    /* width: 600px; */
     justify-content: flex-end;
     margin-top: 12px;
 }

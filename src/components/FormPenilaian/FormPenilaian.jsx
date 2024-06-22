@@ -1,47 +1,168 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './FormPenilaian.css'
 import TitlePage from '../TitlePageAndButton/TitlePage/TitlePage'
 import ButtonDefault from '../TitlePageAndButton/ButtonDefault/ButtonDefault'
 
 
 const FormPenilaian = () => {
+    const [kelasSelected, setKelasSelected] = useState("");
+    const kelas = [
+        {
+            id: 0,
+            kelas: "PILIH KELAS",
+            disabled: true,
+            defaultValue: "PILIH KELAS"
+        },
+        {
+            id: 1,
+            kelas: "X"
+        },
+        {
+            id: 2,
+            kelas: "XI"
+        },
+        {
+            id: 3,
+            kelas: "XII"
+        }
+    ]
+
+    const jurusan = [
+        {
+            id: 0,
+            jurusan: "PILIH JURUSAN",
+            disabled: true,
+            defaultValue: "PILIH JURUSAN"
+        },
+        {
+            id: 1,
+            jurusan: "LISTRIK"
+        },
+        {
+            id: 2,
+            jurusan: "TKR"
+        },
+        {
+            id: 3,
+            jurusan: "MEKATRONIK"
+        }
+    ]
+
+    const dataMapel = [
+        {
+            id: 0,
+            mapel: "PILIH MATA PELAJARAN",
+            disabled: true,
+            defaultValue: "PILIH MATA PELAJARAN"
+        },
+        {
+            id: 1,
+            mapel: "PENDIDIKAN AGAMA DAN BUDI PEKERTI"
+        },
+        {
+            id: 2,
+            mapel: "PENDIDIKAN PANCASILA DAN KEWARGANEGARAAN"
+        },
+        {
+            id: 3,
+            mapel: "BAHASA INDONESIA"
+        },
+        {
+            id: 4,
+            mapel: "SEJARAH"
+        },
+        {
+            id: 5,
+            mapel: "SENI BUDAYA"
+        },
+        {
+            id: 6,
+            mapel: "PJOK"
+        },
+        {
+            id: 7,
+            mapel: "KEMUHAMMADIYAHAN"
+        },
+        {
+            id: 8,
+            mapel: "BAHASA ARAB"
+        },
+        {
+            id: 9,
+            mapel: "MATEMATIKA KEJURUAN"
+        },
+        {
+            id: 10,
+            mapel: "INFORMATIKA"
+        },
+        {
+            id: 11,
+            mapel: "PROYEK IPAS"
+        }
+    ]
+
+    const handleSlectKelas = (e) => {
+        setKelasSelected(e.target.value)
+    }
+
+    console.log(kelasSelected);
     return (
         <div className='container_form_penilaian'>
             <TitlePage title="Form Penilaian Mata Pelajaran" />
 
-            <label htmlFor='kelas' className='label_form_penilaian' style={{ marginTop: '20px' }} >Kelas</label>
             <form>
-                <select name='kelas' id='kelas' className='input_form_penilaian' defaultValue={'PilihKelas'}>
-                    <option disabled className='option_form_penilaian' value={'PilihKelas'}>Pilih Kelas</option>
-                    <option value={"X"} className='option_form_penilaian'>X</option>
-                    <option value={"XI"} className='option_form_penilaian'>XI</option>
-                    <option value={"XII"} className='option_form_penilaian'>XII</option>
+                {/* Opsi Kelas */}
+                <label htmlFor='kelas' className='label_form_penilaian' style={{ marginTop: '20px' }} >Kelas</label>
+                <select name='kelas' id='kelas' className='input_form_penilaian' defaultValue="PILIH KELAS" onChange={handleSlectKelas}>
+                    {kelas.map((value) => {
+                        return <option
+                            disabled={value.disabled || false}
+                            key={value.id}
+                            value={value.kelas}
+                            className='option_form_penilaian'>
+                            {value.kelas}
+                        </option>
+                    })}
                 </select>
-            </form>
 
-            <label htmlFor='jurusan' className='label_form_penilaian'>Jurusan</label>
-            <form>
-                <select name='jurusan' id='jurusan' className='input_form_penilaian' defaultValue={'PilihJurusan'}>
-                    <option disabled className='option_form_penilaian' value={'PilihJurusan'}>Pilih Jurusan</option>
-                    <option value={"RPL"} className='option_form_penilaian'>RPL</option>
-                    <option value={"TKJ"} className='option_form_penilaian'>TKJ</option>
-                    <option value={"TKR"} className='option_form_penilaian'>TKR</option>
+                {/* OPSI JURUSAN */}
+                <label htmlFor='jurusan' className='label_form_penilaian'>Jurusan</label>
+                <select name='jurusan' id='jurusan' className='input_form_penilaian' defaultValue="PILIH JURUSAN">
+                    {jurusan.map((value) => {
+                        return (
+                            <option
+                                disabled={value.disabled || false}
+                                key={value.id}
+                                value={value.jurusan}
+                                className='option_form_penilaian'
+                            >
+                                {value.jurusan}
+                            </option>
+                        )
+                    })}
                 </select>
-            </form>
 
-            <label htmlFor='mata_pelajaran' className='label_form_penilaian'>Mata Pelajaran</label>
-            <form>
-                <select name='mata_pelajaran' id='mata_pelajaran' className='input_form_penilaian' defaultValue={'PilihMataPelajaran'}>
-                    <option disabled className='option_form_penilaian' value={'PilihMataPelajaran'}>Pilih Mata Pelajaran</option>
-                    <option value={"Matematika"} className='option_form_penilaian'>Matematika</option>
-                    <option value={"Fisika"} className='option_form_penilaian'>Fisika</option>
-                    <option value={"Biologi"} className='option_form_penilaian'>Biologi</option>
+                {/* OPSI MAPEL */}
+                <label htmlFor='mata_pelajaran' className='label_form_penilaian'>Mata Pelajaran</label>
+                <select name='mata_pelajaran' id='mata_pelajaran' className='input_form_penilaian' defaultValue="PILIH MATA PELAJARAN">
+                    {dataMapel.map((value) => {
+                        return (
+                            <option
+                                disabled={value.disabled || false}
+                                key={value.id}
+                                value={value.mapel}
+                                className='option_form_penilaian'
+                            >
+                                {value.mapel}
+                            </option>
+                        )
+                    })}
                 </select>
-            </form>
 
-            <div className='container_button_form_penilaian'>
-                <ButtonDefault titleButton="Submit" />
-            </div>
+                <div className='container_button_form_penilaian'>
+                    <ButtonDefault titleButton="Submit" />
+                </div>
+            </form>
 
             <div>
                 table
