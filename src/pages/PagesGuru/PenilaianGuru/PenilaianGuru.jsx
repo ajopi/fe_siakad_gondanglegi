@@ -4,12 +4,15 @@ import NavbarDefault from '../../../components/NavbarDefault/NavbarDefault'
 import SidebarDefault from '../../../components/SidebarDefault/SidebarDefault'
 import TitlePageAndButton from '../../../components/TitlePageAndButton/TitlePageAndButton'
 import FormPenilaian from '../../../components/FormPenilaian/FormPenilaian'
-import axios from 'axios'
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
+import { Alert, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchDataApi } from '../../../redux/slice/getDataSlice'
 
 const PenilaianGuru = () => {
-  const [clicked, setClicked] = useState(0);
+  const dispatch = useDispatch();
+  const { data, loading, error } = useSelector((state) => state.getDataSiswa);
 
+  const [clicked, setClicked] = useState(0);
   const handleBtnCreateForm = () => {
     setClicked(clicked + 1);
   }
@@ -58,43 +61,33 @@ const PenilaianGuru = () => {
     setPage(0);
   };
 
-
-
-  // Get data All Siswa
+  // get data siswa using redux
   useEffect(() => {
-    const user_token = sessionStorage.getItem('token');
-    let config = {
-      method: 'get',
-      maxBodyLength: Infinity,
-      url: `${process.env.REACT_APP_BASE_URL}/api/v1/siswa`,
-      headers: {
-        'x-access-token': user_token,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-    };
-    axios.request(config)
-      .then((response) => {
-        const data = response.data.siswa.map((value, index) => {
-          const nilai = value.raport.map(item => parseInt(item.nilai));
-          const jumlahNilai = nilai.length > 0 ? nilai.reduce((acc, curr) => acc + curr) : 0;
-          const rataNilai = nilai.length > 0 ? (jumlahNilai / nilai.length).toFixed(2) : "Nilai Belum Masuk";
-          return {
-            no: index + 1,
-            nama_siswa: value.nama,
-            kelas: value.kelas,
-            jurusan: value.jurusan,
-            nilai_akhir: rataNilai
-          };
-        });
+    dispatch(fetchDataApi())
+  }, [dispatch]);
 
-        setRows(data);
+  useEffect(() => {
+    if (data.length > 0) {
+      const getData = data.map((value, index) => {
+        const nilai = value.raport.map(item => parseInt(item.nilai));
+        const jumlahNilai = nilai.length > 0 ? nilai.reduce((acc, curr) => acc + curr, 0) : 0;
+        const avg = nilai.length > 0 ? (jumlahNilai / nilai.length).toFixed(2) : "Nilai Belum Masuk";
+        return {
+          no: index + 1,
+          nama_siswa: value.nama,
+          kelas: value.kelas,
+          jurusan: value.jurusan,
+          nilai_akhir: avg
+        }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      setRows(getData);
+    }
 
-  }, [])
+  }, [data])
+
+
+
+
 
   const handleFormCreateSurat = () => {
     if (clicked === 0) {
@@ -105,7 +98,6 @@ const PenilaianGuru = () => {
           titleButton="Tambah Nilai Mata Pelajaran"
         />
         {/* MUI TABLE */}
-
         <Paper sx={{ width: '100%' }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="sticky table">
@@ -123,47 +115,39 @@ const PenilaianGuru = () => {
                   ))}
                 </TableRow>
               </TableHead>
-              <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => {
-                    return (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                        {column.map((column) => {
-                          const value = row[column.id];
-                          return (
-                            <TableCell key={column.id} align={column.align}>
-                              {column.id === 'action' ? (
-                                <>
-                                  <Button
-                                    // startIcon={<EditIcon />}
-                                    variant="contained"
-                                    color="primary"
-                                    style={{ marginRight: '8px' }}
-                                  // onClick={handleEdit}
-                                  >
-                                    Edit
-                                  </Button>
-                                  <Button
-                                    // startIcon={<DeleteIcon />}
-                                    variant="contained"
-                                    color="secondary"
-                                  // onClick={() => { handleOpen(row.id) }}
-                                  >
-                                    {/* {console.log(dataSuratId)} */}
-                                    Delete
-                                  </Button>
-                                </>
-                              ) : (
-                                value
-                              )}
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
+              {loading ? (
+                <TableBody>
+                  <TableRow>
+                    <TableCell colSpan={column.length}>
+                      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                        <CircularProgress />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              ) : error ? (
+                <Alert severity="error">{error}</Alert>
+              ) : (
+                <TableBody>
+                  {rows
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => {
+                      return (
+                        <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                          {column.map((column) => {
+                            const value = row[column.id];
+                            return (
+                              <TableCell key={column.id} align={column.align}>
+                                {value}
+                              </TableCell>
+                            );
+                          })}
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              )}
+
             </Table>
           </TableContainer>
           <TablePagination
@@ -175,15 +159,7 @@ const PenilaianGuru = () => {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-          {/* <ConfirmationDialog
-            open={open}
-            onClose={handleClose}
-            onConfirm={handleDelete}
-            dialogTitle={"Konfirmasi Hapus!!"}
-            dialogContent={"Apakah anda yakin ingin menghapus data ini?"}
-          /> */}
         </Paper >
-
       </div>
     } else {
       return <FormPenilaian />
@@ -193,7 +169,8 @@ const PenilaianGuru = () => {
 
 
   return (
-    <div className='container_penilaian_guru'>
+    < div className='container_penilaian_guru' >
+      {console.log(rows)}
       <NavbarDefault />
       <div className='container_page_and_sidebar'>
         <aside className='container_sidebar_penilaian_guru'>
@@ -205,7 +182,7 @@ const PenilaianGuru = () => {
         </div>
       </div>
 
-    </div>
+    </div >
   )
 }
 

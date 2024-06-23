@@ -6,6 +6,12 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     padding: 12px;
     border-radius: 12px;
+    /* width: 600px; */
+}
+
+.container_content_form_penilaian{
+    display: flex;
+    flex-direction: column;
     width: 600px;
 }
 

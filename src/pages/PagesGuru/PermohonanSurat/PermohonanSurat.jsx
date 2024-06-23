@@ -101,14 +101,12 @@ const PermohonanSurat = () => {
 
     const handleOpen = (e) => {
         setDataSuratId(e);
-
         setOpen(true);
     }
 
     const handleClose = () => {
         setOpen(false);
     }
-
 
 
 
@@ -219,7 +217,6 @@ const PermohonanSurat = () => {
                         dialogContent={"Apakah anda yakin ingin menghapus data ini?"}
                     />
                 </Paper >
-
             </div >
         } else {
             return <FormPermohonanSurat />
@@ -239,7 +236,6 @@ const PermohonanSurat = () => {
 
                 <div className='container_content_permohonansurat'>
                     {handleFormCreateSurat()}
-                    {/* {console.log(dataSuratGuru)} */}
                 </div>
             </div>
 
