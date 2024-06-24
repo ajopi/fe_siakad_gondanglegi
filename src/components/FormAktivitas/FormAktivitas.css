@@ -1,0 +1,63 @@
+.wrapper_form_aktivitas{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 12px;
+    max-width: 600px;
+}
+
+.label_form_aktivitas{
+    font-family: 'Poppins';
+    font-weight: bold;
+}
+
+
+.input_form_aktivitas{
+    border: 1px solid black;
+    border-radius: 10px;
+    /* width: 600px; */
+    margin-bottom: 16px;
+    padding: 6px;
+}
+
+.input_form_aktivitas::placeholder{
+    font-family: 'Poppins';
+    font-weight: normal;
+    color: rgba(191, 207, 231, 1);
+}
+
+
+.container_date_time_form_aktivitas{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 16px;
+}
+
+
+.container_tanggal_mulai_aktivitas{
+    display: flex;
+    flex-direction: column;
+}
+
+.container_tanggal_selesai_aktivitas{
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.input_date_form_aktivitas{
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    padding: 6px;
+}
+
+.input_date_form_aktivitas::placeholder{
+    font-family: 'Poppins';
+    font-weight: normal;
+    color: rgba(191, 207, 231, 1);
+}
