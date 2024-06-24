@@ -1,13 +1,23 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TitlePage from '../TitlePageAndButton/TitlePage/TitlePage'
 import './FormAktivitas.css'
 import ButtonDefault from '../TitlePageAndButton/ButtonDefault/ButtonDefault'
 import axios from 'axios'
 
-const FormAktivitas = () => {
+const FormAktivitas = ({ editData }) => {
   const [namaKegiatan, setNamaKegiatan] = useState("")
   const [dateStart, setDateStart] = useState("")
   const [dateEnd, setDateEnd] = useState("")
+
+  useEffect(() => {
+    if (editData) {
+      setNamaKegiatan(editData.kegiatan)
+      console.log(namaKegiatan);
+      setDateStart(editData.start_date)
+      setDateEnd(editData.end_date)
+    }
+  }, [editData])
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,9 +29,9 @@ const FormAktivitas = () => {
     });
 
     let config = {
-      method: 'post',
+      method: editData ? 'put' : 'post',
       maxBodyLength: Infinity,
-      url: `${process.env.REACT_APP_BASE_URL}/api/v1/activ`,
+      url: `${process.env.REACT_APP_BASE_URL}/api/v1/activ${editData ? `/${editData.id}/update` : ''}`,
       headers: {
         'x-access-token': token,
         'Accept': 'application/json',
@@ -33,7 +43,7 @@ const FormAktivitas = () => {
     axios.request(config)
       .then((response) => {
         console.log(response.data);
-        alert("Berhasil menambahkan data");
+        alert(editData ? "Berhasil mengupdate data" : "Berhasil menambahkan data");
         window.location.reload();
       })
       .catch((error) => {

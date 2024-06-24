@@ -10,11 +10,10 @@ import authServices from '../../../Services/auth.services'
 import ConfirmationDialog from '../../../components/ConfirmationDialog/ConfirmationDialog'
 
 const Aktivitas = () => {
-  const [clicked, setClicked] = useState(0);
-
+  const [clicked, setClicked] = useState(false);
+  const [editData, setEditData] = useState(null);
   const handleBtnCreateAktivitas = () => {
-    setClicked(clicked + 1);
-    console.log(clicked);
+    setClicked(true);
   }
 
   // get data
@@ -38,8 +37,8 @@ const Aktivitas = () => {
 
     axios.request(config)
       .then((response) => {
-        console.log(response.data.activ[0].s_activity.split('T')[0]);
-        console.log(response.data.activ);
+        // console.log(response.data.activ[0].s_activity.split('T')[0]);
+        // console.log(response.data.activ);
         const data = response.data.activ.map((value, index) => {
           const getStartDate = value.s_activity.split('T')[0]
           const getEndDate = value.e_activity.split('T')[0]
@@ -56,7 +55,6 @@ const Aktivitas = () => {
       .catch((error) => {
         console.log(error);
       });
-
 
   }, [])
 
@@ -126,8 +124,13 @@ const Aktivitas = () => {
     }
   }
 
+  const handleEdit = (data) => {
+    setEditData(data);
+    setClicked(true);
+  }
+
   const handleFormCreateAktivitas = () => {
-    if (clicked === 0) {
+    if (!clicked) {
       return <div className='container_wrapper_admin'>
         <TitlePageAndButton
           title="Aktivitas"
@@ -167,6 +170,7 @@ const Aktivitas = () => {
                                     variant='contained'
                                     color="primary"
                                     style={{ marginRight: '10px' }}
+                                    onClick={() => { handleEdit(row) }}
                                   >
                                     Edit
                                   </Button>
@@ -207,13 +211,14 @@ const Aktivitas = () => {
         </Paper >
       </div>
     } else {
-      return <FormAktivitas />
+      return <FormAktivitas editData={editData} />
     }
 
   }
 
   return (
     <div className='container_admin'>
+      {console.log(editData)}
       <NavbarDefault />
       <div className='container_page_and_sidebar'>
         <aside className='container_sidebar_admin'>
