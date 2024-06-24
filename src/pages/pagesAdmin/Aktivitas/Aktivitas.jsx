@@ -6,6 +6,8 @@ import TitlePageAndButton from '../../../components/TitlePageAndButton/TitlePage
 import FormAktivitas from '../../../components/FormAktivitas/FormAktivitas'
 import axios from 'axios'
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
+import authServices from '../../../Services/auth.services'
+import ConfirmationDialog from '../../../components/ConfirmationDialog/ConfirmationDialog'
 
 const Aktivitas = () => {
   const [clicked, setClicked] = useState(0);
@@ -42,6 +44,7 @@ const Aktivitas = () => {
           const getStartDate = value.s_activity.split('T')[0]
           const getEndDate = value.e_activity.split('T')[0]
           return {
+            id: value.id,
             no: index + 1,
             kegiatan: value.name,
             start_date: getStartDate,
@@ -98,6 +101,31 @@ const Aktivitas = () => {
     setPage(0);
   };
 
+  // MODAL n function confirmation
+  const [open, setOpen] = useState(false);
+  const [dataAktivitasId, setDataAktivitasId] = useState(null);
+
+  const handleOpen = (e) => {
+    setDataAktivitasId(e);
+    setOpen(true);
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  }
+
+  const handleDelete = (e) => {
+    e.preventDefault();
+    console.log("button clicked");
+    try {
+      authServices.handleDeleteAktivitas(dataAktivitasId);
+      setOpen(false);
+      window.location.reload();
+    } catch (error) {
+      alert(error.message)
+    }
+  }
+
   const handleFormCreateAktivitas = () => {
     if (clicked === 0) {
       return <div className='container_wrapper_admin'>
@@ -138,13 +166,14 @@ const Aktivitas = () => {
                                   <Button
                                     variant='contained'
                                     color="primary"
-                                    style={{marginRight: '10px'}}
+                                    style={{ marginRight: '10px' }}
                                   >
                                     Edit
                                   </Button>
                                   <Button
                                     variant='contained'
                                     color="error"
+                                    onClick={() => { handleOpen(row.id) }}
                                   >
                                     Delete
                                   </Button>
@@ -167,6 +196,13 @@ const Aktivitas = () => {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+          <ConfirmationDialog
+            open={open}
+            onClose={handleClose}
+            onConfirm={handleDelete}
+            dialogTitle={"Konfirmasi Hapus!!"}
+            dialogContent={"Apakah anda yakin ingin menghapus data ini?"}
           />
         </Paper >
       </div>
