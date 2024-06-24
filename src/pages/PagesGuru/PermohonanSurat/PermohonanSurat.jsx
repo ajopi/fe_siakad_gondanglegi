@@ -110,10 +110,6 @@ const PermohonanSurat = () => {
 
 
 
-    const handleEdit = () => {
-        console.log('button clicked');
-    }
-
     // function untuk menghapus data surat by id
     const handleDelete = (e) => {
         e.preventDefault();
@@ -170,18 +166,9 @@ const PermohonanSurat = () => {
                                                             {column.id === 'action' ? (
                                                                 <>
                                                                     <Button
-                                                                        startIcon={<EditIcon />}
-                                                                        variant="contained"
-                                                                        color="primary"
-                                                                        style={{ marginRight: '8px' }}
-                                                                        onClick={handleEdit}
-                                                                    >
-                                                                        Edit
-                                                                    </Button>
-                                                                    <Button
                                                                         startIcon={<DeleteIcon />}
                                                                         variant="contained"
-                                                                        color="secondary"
+                                                                        color="error"
                                                                         onClick={() => { handleOpen(row.id) }}
                                                                     >
                                                                         {console.log(dataSuratId)}

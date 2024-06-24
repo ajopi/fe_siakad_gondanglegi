@@ -9,6 +9,12 @@
     /* width: 600px; */
 }
 
+.container_wrapper_padding_content{
+    display: flex;
+    flex-direction: column;
+    max-height: 79vh;
+    overflow-y: auto;
+}
 .container_content_form_penilaian{
     display: flex;
     flex-direction: column;
@@ -29,6 +35,13 @@
     border-radius: 10px;
     width: 100%;
     margin-bottom: 16px;
+    padding: 6px 6px 6px 12px;
+}
+
+.input_form_penilaian_mapel {
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 100%;
     padding: 6px 6px 6px 12px;
 }
 

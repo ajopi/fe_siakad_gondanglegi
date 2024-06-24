@@ -4,6 +4,11 @@
     height: 100vh;
 }
 
+.container_page_and_sidebar_penilaian_guru{
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
 
 .container_sidebar_penilaian_guru {
     width: 20%;
@@ -17,7 +22,7 @@
     flex-direction: column;
     background-color: rgb(247, 247, 247);
     width: 80%;
-    padding: 30px 140px 20px 60px;
+    padding: 30px 60px 20px 60px;
 }
 
 

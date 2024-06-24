@@ -82,7 +82,6 @@ const PenilaianGuru = () => {
       })
       setRows(getData);
     }
-
   }, [data])
 
 
@@ -170,9 +169,8 @@ const PenilaianGuru = () => {
 
   return (
     < div className='container_penilaian_guru' >
-      {console.log(rows)}
       <NavbarDefault />
-      <div className='container_page_and_sidebar'>
+      <div className='container_page_and_sidebar_penilaian_guru'>
         <aside className='container_sidebar_penilaian_guru'>
           <SidebarDefault />
         </aside>

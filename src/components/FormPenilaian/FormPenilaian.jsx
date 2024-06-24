@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import './FormPenilaian.css'
 import TitlePage from '../TitlePageAndButton/TitlePage/TitlePage'
-import ButtonDefault from '../TitlePageAndButton/ButtonDefault/ButtonDefault'
-import { Paper, Table, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
-import axios from 'axios'
+import { Alert, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField } from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchDataApi } from '../../redux/slice/getDataSlice'
 
 const FormPenilaian = () => {
     const [kelasSelected, setKelasSelected] = useState("");
     const [jurusanSelected, setJurusanSelected] = useState("");
     const [mapelSelected, setMapelSelected] = useState("");
+    const dispatch = useDispatch();
+    const { data, loading, error } = useSelector((state) => state.getDataSiswa);
+
     const kelas = [
         {
             id: 0,
@@ -39,7 +42,7 @@ const FormPenilaian = () => {
         },
         {
             id: 1,
-            jurusan: "LISTRIK"
+            jurusan: "LIST"
         },
         {
             id: 2,
@@ -47,7 +50,7 @@ const FormPenilaian = () => {
         },
         {
             id: 3,
-            jurusan: "MEKATRONIK"
+            jurusan: "MEKATRONIKA-ETP"
         }
     ]
 
@@ -106,182 +109,297 @@ const FormPenilaian = () => {
 
     const columns = [
         {
-            id: 0,
+            id: 'no',
             label: "No",
-            width: '10%'
+            width: '5%'
         },
         {
-            id: 1,
+            id: 'nama_siswa',
             label: "Nama Siswa",
-            width: '22.5%'
+            width: '21.25%'
         },
         {
-            id: 2,
+            id: 'kelas',
             label: "Kelas",
-            width: '22.5%'
+            width: '10%',
+            align: 'center'
         },
         {
-            id: 3,
+            id: 'jurusan',
             label: "Jurusan",
-            width: '22.5%'
+            width: '15%',
+            align: 'center'
         },
         {
-            id: 4,
-            label: "Nilai",
-            width: '22.5%'
+            id: 'mapel',
+            label: "Mata Pelajaran",
+            width: '21.25%',
+            align: 'center'
+        },
+        {
+            id: 'action',
+            label: "Action",
+            width: '21.25%',
+            align: 'center'
         }
     ]
 
     // ======================GET DATA SISWA BY INPUT======================
+    const [rows, setRows] = useState([]);
     useEffect(() => {
-        const user_token = sessionStorage.getItem("token");
-        let data = '';
-        let config = {
-            method: 'get',
-            maxBodyLength: Infinity,
-            url: `${process.env.REACT_APP_BASE_URL}/api/v1/siswa/kelas?kelas=X &jurusan=LISTRIK`,
-            headers: {
-                'x-access-token': user_token,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            data: data
-        };
+        dispatch(fetchDataApi())
+    }, [dispatch]);
 
-        axios.request(config)
-            .then((response) => {
-                console.log(response.data);
+    useEffect(() => {
+        if (data.length > 0) {
+            const getData = data.map((value, index) => {
+                const nilai = value.raport.map(item => parseInt(item.nilai));
+                const jumlahNilai = nilai.length > 0 ? nilai.reduce((acc, curr) => acc + curr, 0) : 0;
+                const avg = nilai.length > 0 ? (jumlahNilai / nilai.length).toFixed(2) : "Nilai Belum Masuk";
+
+                return {
+                    idSiswa: value.id,
+                    no: index + 1,
+                    nama_siswa: value.nama,
+                    kelas: value.kelas,
+                    jurusan: value.jurusan
+                }
             })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [])
+            setRows(getData);
+        }
+    }, [data])
 
+    // filtered rows
+    const filteredRows = rows.filter(value =>
+        (kelasSelected === "" || value.kelas === kelasSelected) &&
+        (jurusanSelected === "" || value.jurusan === jurusanSelected)
+    )
 
-    console.log(kelasSelected);
+    //STATE n FUnction FOR TABLE
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+    };
+
+    // MODAL EDIT
+    const [open, setOpen] = useState(false);
+    const [siswaId, setSiswaId] = useState(null);
+    const handleOpen = (e) => {
+        setSiswaId(e);
+        setOpen(true);
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    }
+
     return (
         <div className='container_form_penilaian'>
-            <TitlePage title="Form Penilaian Mata Pelajaran" />
-            <div className='container_content_form_penilaian'>
-                <form>
-                    {/* Opsi Kelas */}
-                    <label htmlFor='kelas' className='label_form_penilaian' style={{ marginTop: '20px' }} >Kelas</label>
-                    <select name='kelas' id='kelas' className='input_form_penilaian' defaultValue="PILIH KELAS" onChange={(e) => setKelasSelected(e.target.value)}>
-                        {kelas.map((value) => {
-                            return <option
-                                disabled={value.disabled || false}
-                                key={value.id}
-                                value={value.kelas}
-                                className='option_form_penilaian'>
-                                {value.kelas}
-                            </option>
-                        })}
-                    </select>
+            {console.log(rows.filter(value =>
+                value.kelas === kelasSelected && value.jurusan === jurusanSelected
+            ))}
+            {console.log(data)}
 
-                    {/* OPSI JURUSAN */}
-                    <label htmlFor='jurusan' className='label_form_penilaian'>Jurusan</label>
-                    <select name='jurusan' id='jurusan' className='input_form_penilaian' defaultValue="PILIH JURUSAN">
-                        {jurusan.map((value) => {
-                            return (
-                                <option
+            <div className='container_wrapper_padding_content'>
+                <TitlePage title="Form Penilaian Mata Pelajaran" />
+                <div className='container_content_form_penilaian'>
+                    <form>
+                        {/* Opsi Kelas */}
+                        <label htmlFor='kelas' className='label_form_penilaian' style={{ marginTop: '20px' }} >Kelas</label>
+                        <select name='kelas' id='kelas' className='input_form_penilaian' defaultValue="PILIH KELAS" onChange={(e) => setKelasSelected(e.target.value)}>
+                            {kelas.map((value) => {
+                                return <option
                                     disabled={value.disabled || false}
                                     key={value.id}
-                                    value={value.jurusan}
-                                    className='option_form_penilaian'
-                                >
-                                    {value.jurusan}
+                                    value={value.kelas}
+                                    className='option_form_penilaian'>
+                                    {value.kelas}
                                 </option>
-                            )
-                        })}
-                    </select>
+                            })}
+                        </select>
 
-                    {/* OPSI MAPEL */}
-                    <label htmlFor='mata_pelajaran' className='label_form_penilaian'>Mata Pelajaran</label>
-                    <select name='mata_pelajaran' id='mata_pelajaran' className='input_form_penilaian' defaultValue="PILIH MATA PELAJARAN">
-                        {dataMapel.map((value) => {
-                            return (
-                                <option
-                                    disabled={value.disabled || false}
-                                    key={value.id}
-                                    value={value.mapel}
-                                    className='option_form_penilaian'
-                                >
-                                    {value.mapel}
-                                </option>
-                            )
-                        })}
-                    </select>
-
-                    <div className='container_button_form_penilaian'>
-                        <ButtonDefault titleButton="Submit" />
-                    </div>
-                </form>
-            </div>
-            {/* <Paper sx={{ width: '100%' }}>
-                <TableContainer sx={{ maxHeight: 440 }}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead >
-                            <TableRow >
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{ width: column.width }}
-                                        sx={{ color: 'black', fontWeight: 'bold' }}
+                        {/* OPSI JURUSAN */}
+                        <label htmlFor='jurusan' className='label_form_penilaian'>Jurusan</label>
+                        <select name='jurusan' id='jurusan' className='input_form_penilaian' defaultValue="PILIH JURUSAN" onChange={(e) => setJurusanSelected(e.target.value)}>
+                            {jurusan.map((value) => {
+                                return (
+                                    <option
+                                        disabled={value.disabled || false}
+                                        key={value.id}
+                                        value={value.jurusan}
+                                        className='option_form_penilaian'
                                     >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row, index) => {
-                                    return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                                            {column.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <TableCell key={column.id} align={column.align}>
-                                                        {column.id === 'action' ? (
-                                                            <>
-                                                                <Button
-                                                                    variant="contained"
-                                                                    color="primary"
-                                                                    style={{ marginRight: '8px' }}
-                                                                >
-                                                                    Edit
-                                                                </Button>
-                                                                <Button
-                                                                    variant="contained"
-                                                                    color="secondary"
-                                                                >
-                                                                    Delete
-                                                                </Button>
-                                                            </>
-                                                        ) : (
-                                                            value
-                                                        )}
-                                                    </TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-                                    );
-                                })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25, 100]}
-                    component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            </Paper > */}
+                                        {value.jurusan}
+                                    </option>
+                                )
+                            })}
+                        </select>
+
+                        {/* OPSI MAPEL */}
+                        {/* <label htmlFor='mata_pelajaran' className='label_form_penilaian'>Mata Pelajaran</label>
+                        <select name='mata_pelajaran' id='mata_pelajaran' className='input_form_penilaian' defaultValue="PILIH MATA PELAJARAN" onChange={(e) => setMapelSelected(e.target.value)}>
+                            {dataMapel.map((value) => {
+                                return (
+                                    <option
+                                        disabled={value.disabled || false}
+                                        key={value.id}
+                                        value={value.mapel}
+                                        className='option_form_penilaian'
+                                    >
+                                        {value.mapel}
+                                    </option>
+                                )
+                            })}
+                        </select> */}
+                    </form>
+                </div>
+
+                <Paper sx={{ width: '100%' }}>
+                    <TableContainer sx={{ maxHeight: 440 }}>
+                        <Table stickyHeader aria-label="sticky table">
+                            <TableHead >
+                                <TableRow >
+                                    {columns.map((column) => (
+                                        <TableCell
+                                            key={column.id}
+                                            align={column.align}
+                                            style={{ width: column.width }}
+                                            sx={{ color: 'black', fontWeight: 'bold' }}
+                                        >
+                                            {column.label}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {kelasSelected.length && jurusanSelected.length > 0 ?
+                                    loading ?
+                                        (<TableRow>
+                                            <TableCell colSpan={columns.length}>
+                                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                                    <CircularProgress />
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>) : error ?
+                                            (<TableRow>
+                                                <TableCell colSpan={columns.length}>
+                                                    <Alert severity="error">{error}</Alert>
+                                                </TableCell>
+                                            </TableRow>) :
+                                            (filteredRows
+                                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                .map((row, index) => (
+                                                    <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                                                        {columns.map((column) => {
+                                                            const value = row[column.id];
+                                                            return (
+                                                                <TableCell key={column.id} align={column.align}>
+                                                                    {column.id === 'mapel' ?
+                                                                        (<>
+                                                                            <select name='mata_pelajaran' id={value} className='input_form_penilaian_mapel' defaultValue={dataMapel[0].id} onChange={(e) => setMapelSelected(e.target.value)}>
+                                                                                {dataMapel.map((value) => {
+                                                                                    return (
+                                                                                        <option
+                                                                                            disabled={value.disabled || false}
+                                                                                            key={value.id}
+                                                                                            value={value.id}
+                                                                                            className='option_form_penilaian'
+                                                                                        >
+                                                                                            {value.mapel}
+                                                                                        </option>
+                                                                                    )
+                                                                                })}
+                                                                            </select>
+                                                                        </>)
+                                                                        : column.id === 'action' ?
+                                                                            (<>
+                                                                                <Button
+                                                                                    // startIcon={<DeleteIcon />}
+                                                                                    variant="contained"
+                                                                                    color='primary'
+                                                                                    style={{ marginRight: '8px' }}
+                                                                                >
+                                                                                    Add
+                                                                                </Button>
+                                                                                <Button
+                                                                                    // startIcon={<DeleteIcon />}
+                                                                                    variant="contained"
+                                                                                    color="success"
+                                                                                    onClick={() => handleOpen(row.idSiswa)}
+                                                                                >
+                                                                                    {console.log(row.idSiswa)}
+                                                                                    Edit
+                                                                                </Button>
+                                                                            </>)
+                                                                            :
+                                                                            value}
+
+                                                                </TableCell>
+                                                            )
+                                                        })}
+                                                    </TableRow>
+                                                ))) :
+                                    (<TableCell colSpan={columns.length}>
+                                        <Alert severity="error">Isikan Form Terlebih Dahulu</Alert>
+                                    </TableCell>)}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <TablePagination
+                        rowsPerPageOptions={[5, 10, 25, 100]}
+                        component="div"
+                        count={filteredRows.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                    <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        PaperProps={{
+                            component: 'form',
+                            // onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+                            //     event.preventDefault();
+                            //     const formData = new FormData(event.currentTarget);
+                            //     const formJson = Object.fromEntries((formData as any).entries());
+                            //     const email = formJson.email;
+                            //     console.log(email);
+                            //     handleClose();
+                            // },
+                        }}
+                    >
+                        <DialogTitle>Subscribe</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                To subscribe to this website, please enter your email address here. We
+                                will send updates occasionally.
+                            </DialogContentText>
+                            <TextField
+                                autoFocus
+                                required
+                                margin="dense"
+                                id="name"
+                                name="email"
+                                label="Email Address"
+                                type="email"
+                                fullWidth
+                                variant="standard"
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose}>Cancel</Button>
+                            <Button type="submit">Subscribe</Button>
+                            {console.log("button clicked, siswa id:", siswaId, "and mapel:", mapelSelected)}
+                        </DialogActions>
+                    </Dialog>
+                </Paper >
+            </div>
 
         </div>
     )
