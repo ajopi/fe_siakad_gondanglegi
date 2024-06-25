@@ -1,4 +1,5 @@
 import axios from 'axios'
+const token = sessionStorage.getItem('token');
 
 const loginUser = (username, password) => {
     let data = JSON.stringify({
@@ -34,7 +35,6 @@ const logoutUser = () => {
 }
 
 const handleDeleteSurat = (id) => {
-    const token = sessionStorage.getItem('token');
     let config = {
         method: 'delete',
         maxBodyLength: Infinity,
@@ -79,11 +79,34 @@ const handleDeleteAktivitas = (id) => {
 
 }
 
+const handleDeleteGuru = (id) => {
+    let config = {
+        method: 'delete',
+        maxBodyLength: Infinity,
+        url: `${process.env.REACT_APP_BASE_URL}/api/v1/guru/${id}/delete`,
+        headers: {
+            'x-access-token': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    };
+
+    axios.request(config)
+        .then((response) => {
+            console.log(response.data);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
+}
+
 const authServices = {
     loginUser,
     logoutUser,
     handleDeleteSurat,
-    handleDeleteAktivitas
+    handleDeleteAktivitas,
+    handleDeleteGuru
 }
 
 export default authServices

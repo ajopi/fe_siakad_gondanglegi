@@ -1,0 +1,60 @@
+.wrapper_form_data_guru{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 12px;
+    max-height: 75vh;
+    overflow-y: auto;
+    /* max-width: 600px; */
+}
+
+.label_form_data_guru{
+    font-family: 'Poppins';
+    font-weight: bold;
+}
+
+.input_form_data_guru{
+    border: 1px solid black;
+    border-radius: 10px;
+    /* width: 600px; */
+    margin-bottom: 16px;
+    padding: 6px;
+}
+
+.input_form_data_guru::placeholder{
+    font-family: 'Poppins';
+    font-weight: normal;
+    color: rgba(191, 207, 231, 1);
+}
+
+
+.container_jenis_kelamin_form_data_guru{
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    /* align-items: center; */
+    /* justify-items: center; */
+    /* background-color: aqua; */
+}
+
+
+.container_date_time_form_data_guru{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 25px;
+    margin-top: 16px;
+}
+
+
+.container_tanggal_lahir_form_data_guru{
+    display: flex;
+    flex-direction: column;
+}
+
+.container_tanggal_selesai_aktivitas{
+    display: flex;
+    flex-direction: column;
+}
