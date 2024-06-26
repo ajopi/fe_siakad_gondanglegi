@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import getDataSlice from "./slice/getDataSlice";
 import getDataGuru from "./slice/getDataGuru";
+import getDataSurat from "./slice/getDataSurat";
 
 const store = configureStore({
     reducer: {
         getDataSiswa: getDataSlice,
-        getDataGuruReducer: getDataGuru
+        getDataGuruReducer: getDataGuru,
+        getDataSuratReducer: getDataSurat
     }
 })
 

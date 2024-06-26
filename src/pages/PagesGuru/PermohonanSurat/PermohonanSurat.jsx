@@ -14,8 +14,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmationDialog from '../../../components/ConfirmationDialog/ConfirmationDialog'
 import authServices from '../../../Services/auth.services'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchDataSurat } from '../../../redux/slice/getDataSurat'
 
 const PermohonanSurat = () => {
+    const { data, loading, error } = useSelector((state) => state.getDataSuratReducer);
+    const dispatch = useDispatch();
+
     // handle button click create surat 
     const [clicked, setClicked] = useState(0);
     const handleBtnCreateSurat = () => {
@@ -52,37 +57,24 @@ const PermohonanSurat = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
-    //===============================USEEFFECT untuk get data dari API===============================
+    //===============================USEEFFECT untuk get data dari Redux===============================
     useEffect(() => {
-        const user_token = sessionStorage.getItem('token');
-        const FormData = require('form-data');
-        let data = new FormData();
-        let config = {
-            method: 'get',
-            maxBodyLength: Infinity,
-            url: `${process.env.REACT_APP_BASE_URL}/api/v1/dinas`,
-            headers: {
-                'x-access-token': user_token,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            data: data
-        };
+        dispatch(fetchDataSurat())
+    }, [dispatch])
 
-        axios.request(config)
-            .then((response) => {
-                const data = response.data.dinas.map((value, index) => ({
-                    no: index + 1,
-                    tujuan: value.keperluan,
-                    status: value.validation ? "Done" : "Pending",
-                    id: value.id
-                }));
-                setRows(data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [])
+    useEffect(() => {
+        const getData = data.map((value, index) => {
+            return {
+                no: index + 1,
+                tujuan: value.keperluan,
+                status: value.validation ? "Done" : "Pending",
+                id: value.id
+            }
+        })
+        setRows(getData);
+    }, [data])
+
+
 
 
     const handleChangePage = (event, newPage) => {

@@ -148,8 +148,6 @@ const KelolaDataGuru = () => {
   const handleFormTambahGuru = () => {
     if (!clicked) {
       return <div className='container_wrapper_admin'>
-        {/* {console.log(rows)} */}
-        {/* {console.log(data[0].ttl.split(',')[0])} */}
         <TitlePageAndButton
           title="Kelola Data Guru"
           handleFunction={handleBtnCreateDataGuru}

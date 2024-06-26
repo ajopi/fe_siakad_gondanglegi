@@ -1,0 +1,20 @@
+.input_select_form_data_siswa{
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 6px;
+    margin-bottom: 16px;
+}
+
+.container_data_wali{
+    display: flex;
+    flex-direction: row;
+    /* background-color: aqua; */
+    justify-content: space-between;
+
+}
+
+.container_content_data_wali_form_data_siswa{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+}

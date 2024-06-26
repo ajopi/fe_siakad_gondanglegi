@@ -101,6 +101,9 @@ const handleDeleteGuru = (id) => {
 
 }
 
+const handleDeleteSiswa = (id) => {
+
+}
 const authServices = {
     loginUser,
     logoutUser,
