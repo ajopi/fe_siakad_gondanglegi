@@ -9,6 +9,7 @@ import FormDataSiswa from '../../../components/FormDataSiswa/FormDataSiswa'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchDataApi } from '../../../redux/slice/getDataSlice'
 import ConfirmationDialog from '../../../components/ConfirmationDialog/ConfirmationDialog'
+import authServices from '../../../Services/auth.services'
 
 const KelolaDataSiswa = () => {
   // get data from redux store
@@ -111,7 +112,6 @@ const KelolaDataSiswa = () => {
       })
       setRows(getDataSiswa)
     }
-    console.log(rows)
   }, [data])
 
 
@@ -127,9 +127,21 @@ const KelolaDataSiswa = () => {
     setOpen(false);
   }
   const handleDelete = () => {
-    console.log("clicked");
+    try {
+      authServices.handleDeleteSiswa(dataSiswaId);
+      window.location.reload();
+    } catch (error) {
+      console.log(error)
+    }
   }
 
+  // function dan Hook untuk menyimpan edit data
+  const [editData, setEditData] = useState(null)
+
+  const handleEdit = (data) => {
+    setEditData(data);
+    setClicked(true);
+  }
 
   const handleFormSiswa = () => {
     if (!clicked) {
@@ -188,7 +200,7 @@ const KelolaDataSiswa = () => {
                                         color="primary"
                                         style={{ marginRight: '5px' }}
                                         size='small'
-                                      // onClick={() => { handleEdit(row) }}
+                                        onClick={() => { handleEdit(row) }}
                                       >
                                         Edit
                                       </Button>
@@ -198,6 +210,7 @@ const KelolaDataSiswa = () => {
                                         size='small'
                                         onClick={() => { handleOpen(row.id) }}
                                       >
+                                      {console.log(dataSiswaId)}
                                         Delete
                                       </Button>
                                     </>
@@ -232,7 +245,7 @@ const KelolaDataSiswa = () => {
         </Paper >
       </div>
     } else {
-      return <FormDataSiswa />
+      return <FormDataSiswa editData={editData} />
     }
   }
 

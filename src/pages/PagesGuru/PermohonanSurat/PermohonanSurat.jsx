@@ -4,13 +4,11 @@ import './PermohonanSurat.css'
 import SidebarDefault from '../../../components/SidebarDefault/SidebarDefault'
 import FormPermohonanSurat from '../../../components/FormPermohonanSurat/FormPermohonanSurat'
 import TitlePageAndButton from '../../../components/TitlePageAndButton/TitlePageAndButton'
-import axios from 'axios'
 
 // MUI TABlE
-import { Button, TablePagination, Paper, TableRow, TableHead, TableContainer, TableCell, TableBody, Table } from '@mui/material'
+import { Button, TablePagination, Paper, TableRow, TableHead, TableContainer, TableCell, TableBody, Table, Alert, CircularProgress } from '@mui/material'
 
 // MUI ICONS
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmationDialog from '../../../components/ConfirmationDialog/ConfirmationDialog'
 import authServices from '../../../Services/auth.services'
@@ -145,38 +143,53 @@ const PermohonanSurat = () => {
                                     ))}
                                 </TableRow>
                             </TableHead>
-                            <TableBody>
-                                {rows
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((row, index) => {
-                                        return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                                                {columns.map((column) => {
-                                                    const value = row[column.id];
+                            {loading ?
+                                (<TableBody>
+                                    <TableRow>
+                                        <TableCell colSpan={columns.length}>
+                                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                                <CircularProgress />
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableBody>)
+                                : error ?
+                                    (<Alert severity="error">{error}</Alert>)
+                                    :
+                                    (
+                                        <TableBody>
+                                            {rows
+                                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                .map((row, index) => {
                                                     return (
-                                                        <TableCell key={column.id} align={column.align}>
-                                                            {column.id === 'action' ? (
-                                                                <>
-                                                                    <Button
-                                                                        startIcon={<DeleteIcon />}
-                                                                        variant="contained"
-                                                                        color="error"
-                                                                        onClick={() => { handleOpen(row.id) }}
-                                                                    >
-                                                                        {console.log(dataSuratId)}
-                                                                        Delete
-                                                                    </Button>
-                                                                </>
-                                                            ) : (
-                                                                value
-                                                            )}
-                                                        </TableCell>
+                                                        <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                                                            {columns.map((column) => {
+                                                                const value = row[column.id];
+                                                                return (
+                                                                    <TableCell key={column.id} align={column.align}>
+                                                                        {column.id === 'action' ? (
+                                                                            <>
+                                                                                <Button
+                                                                                    startIcon={<DeleteIcon />}
+                                                                                    variant="contained"
+                                                                                    color="error"
+                                                                                    onClick={() => { handleOpen(row.id) }}
+                                                                                >
+                                                                                    Delete
+                                                                                </Button>
+                                                                            </>
+                                                                        ) : (
+                                                                            value
+                                                                        )}
+                                                                    </TableCell>
+                                                                );
+                                                            })}
+                                                        </TableRow>
                                                     );
                                                 })}
-                                            </TableRow>
-                                        );
-                                    })}
-                            </TableBody>
+                                        </TableBody>
+                                    )
+                            }
                         </Table>
                     </TableContainer>
                     <TablePagination

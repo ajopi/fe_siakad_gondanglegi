@@ -102,6 +102,27 @@ const handleDeleteGuru = (id) => {
 }
 
 const handleDeleteSiswa = (id) => {
+    const FormData = require('form-data');
+    let data = new FormData();
+    let config = {
+        method: 'delete',
+        maxBodyLength: Infinity,
+        url: `${process.env.REACT_APP_BASE_URL}/api/v1/siswa/${id}/delete`,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'x-access-token': token,
+        },
+        data: data
+    };
+
+    axios.request(config)
+        .then((response) => {
+            console.log(response.data);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 
 }
 const authServices = {
@@ -109,7 +130,8 @@ const authServices = {
     logoutUser,
     handleDeleteSurat,
     handleDeleteAktivitas,
-    handleDeleteGuru
+    handleDeleteGuru,
+    handleDeleteSiswa
 }
 
 export default authServices

@@ -12,7 +12,6 @@ const FormAktivitas = ({ editData }) => {
   useEffect(() => {
     if (editData) {
       setNamaKegiatan(editData.kegiatan)
-      console.log(namaKegiatan);
       setDateStart(editData.start_date)
       setDateEnd(editData.end_date)
     }

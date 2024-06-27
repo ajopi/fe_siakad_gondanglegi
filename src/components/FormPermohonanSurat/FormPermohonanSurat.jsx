@@ -42,6 +42,7 @@ const FormPermohonanSurat = () => {
       .then((response) => {
         console.log(JSON.stringify(response.data));
         alert("Data Berhasil Dibuat");
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TitlePage from '../TitlePageAndButton/TitlePage/TitlePage'
 import ButtonDefault from '../TitlePageAndButton/ButtonDefault/ButtonDefault'
 import './FormDataSiswa.css'
@@ -52,9 +52,9 @@ const FormDataSiswa = ({ editData }) => {
         });
 
         let config = {
-            method: 'post',
+            method: editData ? 'put' : 'post',
             maxBodyLength: Infinity,
-            url: `${process.env.REACT_APP_BASE_URL}/api/v1/siswa`,
+            url: `${process.env.REACT_APP_BASE_URL}/api/v1/siswa${editData ? `/${editData.id}/update` : ''}`,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -65,7 +65,7 @@ const FormDataSiswa = ({ editData }) => {
 
         axios.request(config)
             .then((response) => {
-                alert("berasil menambahkan data");
+                alert(editData ? "berhasil mengubah data" : "berasil menambahkan data");
                 window.location.reload();
             })
             .catch((error) => {
@@ -73,6 +73,28 @@ const FormDataSiswa = ({ editData }) => {
             });
 
     }
+
+    // hook untuk set value input edit data
+    useEffect(() => {
+        if (editData) {
+            setFormValue({
+                nama: editData.nama,
+                nisn: editData.nisn,
+                kelas: editData.kelas,
+                jurusan: editData.jurusan,
+                tanggalLahir: editData.tanggalLahir,
+                tempatLahir: editData.tempatLahir,
+                alamat: editData.alamat,
+                jenis_kelamin: editData.jenis_kelamin,
+                agama: editData.agama,
+                ayah: editData.ayah,
+                no_ayah: editData.no_ayah,
+                ibu: editData.ibu,
+                no_ibu: editData.no_ibu,
+            })
+        }
+    }, [editData])
+
 
     return (
         <div className='wrapper_form_data_guru'>
@@ -85,14 +107,13 @@ const FormDataSiswa = ({ editData }) => {
                 <input id='nisn' className='input_form_data_guru' type='text' placeholder='Tuliskan NISN Siswa Jika Ada' onChange={handleFormInput} value={formValue.nisn || ''} />
 
                 <label htmlFor='kelas' className='label_form_data_guru'>Kelas</label>
-                <select name='kelas' id='kelas' className='input_select_form_data_siswa' onChange={handleFormInput} required defaultValue='Pilih Kelas'>
+                <select name='kelas' id='kelas' className='input_select_form_data_siswa' onChange={handleFormInput} value={editData ? formValue.kelas || '' : 'Pilih Kelas'} required >
                     <option disabled value='Pilih Kelas' >Pilih Kelas</option>
                     <option value='X'>X</option>
                     <option value='XI'>XI</option>
                     <option value='XII'>XII</option>
                 </select>
 
-                {console.log(formValue)}
                 <span className='label_form_data_guru'>Jenis Kelamin</span>
                 <div className='container_jenis_kelamin_form_data_guru' >
                     <input id='radio_perempuan' name='radio_gender' className='input_form_data_guru_jenis_kelamin' type='radio' value={"P" || ''} checked={formValue.jenis_kelamin === "P"} onChange={handleGender} /> Perempuan
@@ -103,7 +124,7 @@ const FormDataSiswa = ({ editData }) => {
                 <div className='container_date_time_form_data_guru'>
                     <div className='container_tanggal_lahir_form_data_guru'>
                         <label htmlFor='tanggalLahir' className='label_form_data_guru'>Tanggal Lahir</label>
-                        <input id='tanggalLahir' type='date' className='input_date_form_aktivitas' onChange={handleFormInput} value={formValue.tanggalLahir || ''} />
+                        <input id='tanggalLahir' type='date' className='input_date_form_aktivitas' onChange={handleFormInput} value={editData ? '' : formValue.tanggalLahir || ''} />
                     </div>
 
                     <div className='container_tanggal_lahir_form_data_guru'>

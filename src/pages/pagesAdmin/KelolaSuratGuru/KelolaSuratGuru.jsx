@@ -1,9 +1,8 @@
-import React, { useDebugValue, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './KelolaSuratGuru.css'
 import '../styleAdmin.css'
 import NavbarDefault from '../../../components/NavbarDefault/NavbarDefault'
 import SidebarDefault from '../../../components/SidebarDefault/SidebarDefault'
-import TitlePageAndButton from '../../../components/TitlePageAndButton/TitlePageAndButton'
 import { Alert, Button, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
 import ConfirmationDialog from '../../../components/ConfirmationDialog/ConfirmationDialog'
 import { useDispatch, useSelector } from 'react-redux'
@@ -49,7 +48,6 @@ const KelolaSuratGuru = () => {
 
   useEffect(() => {
     dispatch(fetchDataSurat())
-    console.log(data);
   }, [dispatch])
 
   useEffect(() => {
