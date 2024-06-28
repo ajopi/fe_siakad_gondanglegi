@@ -7,6 +7,8 @@ import FormPenilaian from '../../../components/FormPenilaian/FormPenilaian'
 import { Alert, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchDataApi } from '../../../redux/slice/getDataSlice'
+import CardMapel from '../../../components/CardMapel/CardMapel'
+import { useNavigate } from 'react-router-dom'
 
 const PenilaianGuru = () => {
   const dispatch = useDispatch();
@@ -161,7 +163,7 @@ const PenilaianGuru = () => {
         </Paper >
       </div>
     } else {
-      return <FormPenilaian />
+      return <CardMapel/>
     }
   }
 

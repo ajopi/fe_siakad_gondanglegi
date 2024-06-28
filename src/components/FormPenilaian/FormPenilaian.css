@@ -2,23 +2,31 @@
     display: flex;
     flex-direction: column;
 
-    background-color: rgb(255, 255, 255);
+    /* background-color: rgb(255, 255, 255);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     padding: 12px;
-    border-radius: 12px;
+    border-radius: 12px; */
     /* width: 600px; */
+    width: 100%;
 }
 
 .container_wrapper_padding_content{
     display: flex;
     flex-direction: column;
-    max-height: 79vh;
-    overflow-y: auto;
+    /* max-height: 79vh;
+    overflow-y: auto; */
+}
+
+.container_input_and_table_type{
+    display: flex;
+    flex-direction: row;
+    /* background-color: aqua; */
+    justify-content: space-between;
 }
 .container_content_form_penilaian{
     display: flex;
     flex-direction: column;
-    width: 600px;
+    width: 50%;
 }
 
 .label_form_penilaian {

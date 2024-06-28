@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import './FormPenilaian.css'
 import TitlePage from '../TitlePageAndButton/TitlePage/TitlePage'
-import { Alert, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField } from '@mui/material'
+import { Alert, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchDataApi } from '../../redux/slice/getDataSlice'
-
-const FormPenilaian = () => {
+import authServices from '../../Services/auth.services'
+import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog'
+import axios from 'axios'
+const FormPenilaian = ({ typeMapel }) => {
+    const token = sessionStorage.getItem('token')
     const [kelasSelected, setKelasSelected] = useState("");
     const [jurusanSelected, setJurusanSelected] = useState("");
-    const [mapelSelected, setMapelSelected] = useState("");
     const dispatch = useDispatch();
     const { data, loading, error } = useSelector((state) => state.getDataSiswa);
 
@@ -63,7 +65,8 @@ const FormPenilaian = () => {
         },
         {
             id: 1,
-            mapel: "PENDIDIKAN AGAMA DAN BUDI PEKERTI"
+            mapel: "PENDIDIKAN AGAMA DAN BUDI PEKERTI",
+            fontSize: '10px'
         },
         {
             id: 2,
@@ -107,6 +110,7 @@ const FormPenilaian = () => {
         }
     ]
 
+
     const columns = [
         {
             id: 'no',
@@ -116,36 +120,37 @@ const FormPenilaian = () => {
         {
             id: 'nama_siswa',
             label: "Nama Siswa",
-            width: '21.25%'
+            width: '15%'
         },
         {
             id: 'kelas',
             label: "Kelas",
-            width: '10%',
+            width: '5%',
             align: 'center'
         },
         {
             id: 'jurusan',
             label: "Jurusan",
-            width: '15%',
+            width: '25%',
             align: 'center'
         },
         {
-            id: 'mapel',
-            label: "Mata Pelajaran",
-            width: '21.25%',
+            id: 'nilai',
+            label: "Nilai",
+            width: '25%',
             align: 'center'
         },
         {
             id: 'action',
             label: "Action",
-            width: '21.25%',
+            width: '25%',
             align: 'center'
         }
     ]
 
     // ======================GET DATA SISWA BY INPUT======================
     const [rows, setRows] = useState([]);
+    const [raport, setRaport] = useState([]);
     useEffect(() => {
         dispatch(fetchDataApi())
     }, [dispatch]);
@@ -153,27 +158,34 @@ const FormPenilaian = () => {
     useEffect(() => {
         if (data.length > 0) {
             const getData = data.map((value, index) => {
-                const nilai = value.raport.map(item => parseInt(item.nilai));
-                const jumlahNilai = nilai.length > 0 ? nilai.reduce((acc, curr) => acc + curr, 0) : 0;
-                const avg = nilai.length > 0 ? (jumlahNilai / nilai.length).toFixed(2) : "Nilai Belum Masuk";
-
+                const nilaiByType = value.raport.find(raportItem => raportItem.type === typeMapel);
+                const idPenilaianByType = nilaiByType ? nilaiByType.id : null;
                 return {
                     idSiswa: value.id,
                     no: index + 1,
                     nama_siswa: value.nama,
                     kelas: value.kelas,
-                    jurusan: value.jurusan
+                    jurusan: value.jurusan,
+                    nilai: nilaiByType ? nilaiByType.nilai : 'Nilai Tidak ada',
+                    idPenilaian: idPenilaianByType
                 }
             })
             setRows(getData);
         }
-    }, [data])
+    }, [data, typeMapel])
+
+    console.log(rows)
+
+
 
     // filtered rows
     const filteredRows = rows.filter(value =>
         (kelasSelected === "" || value.kelas === kelasSelected) &&
         (jurusanSelected === "" || value.jurusan === jurusanSelected)
     )
+    // filtered mapel type
+    const filteredMapel = dataMapel.filter((item) => (item.mapel !== 'PILIH MATA PELAJARAN'));
+
 
     //STATE n FUnction FOR TABLE
     const [page, setPage] = useState(0);
@@ -188,60 +200,141 @@ const FormPenilaian = () => {
 
     // MODAL EDIT
     const [open, setOpen] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
+    const [openAdd, setOpenAdd] = useState(false);
     const [siswaId, setSiswaId] = useState(null);
+    const [idPenilaian, setIdPenilaian] = useState(null)
     const handleOpen = (e) => {
+        setIdPenilaian(e);
         setSiswaId(e);
         setOpen(true);
     }
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleDelete = (e) => {
+        e.preventDefault();
+        try {
+            authServices.handleDeletePenilaian(idPenilaian);
+            window.location.reload();
+        } catch (error) {
+            alert(error.message)
+        }
+        console.log(e)
     }
 
+    const handleClose = () => {
+        setOpen(false);
+        setOpenAdd(false);
+        setOpenEdit(false);
+    }
+
+    const handleOpenEdit = (e) => {
+        setIdPenilaian(e);
+        setOpenEdit(true);
+    }
+
+    const handleOpenAdd = (e) => {
+        setSiswaId(e);
+        setOpenAdd(true)
+    }
+
+    const [editNilai, setEditNilai] = useState()
+    const handleSubmitEdit = () => {
+        const integerNilai = parseInt(editNilai);
+        let data = JSON.stringify({
+            "nilai": integerNilai
+        });
+
+        let config = {
+            method: 'put',
+            maxBodyLength: Infinity,
+            url: `${process.env.REACT_APP_BASE_URL}/api/v1/penilaian/${idPenilaian}/update`,
+            headers: {
+                'x-access-token': token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+
+        axios.request(config)
+            .then((response) => {
+                console.log(response.data);
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+    }
+
+    const [addNilai, setAddNilai] = useState()
+    const handleSubmitAdd = () => {
+        const integerNilai = parseInt(addNilai)
+        let data = JSON.stringify({
+            "siswa_id": siswaId,
+            "type": typeMapel,
+            "nilai": integerNilai
+        });
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: `${process.env.REACT_APP_BASE_URL}/api/v1/penilaian`,
+            headers: {
+                'x-access-token': token,
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+
+        axios.request(config)
+            .then((response) => {
+                console.log(response.data);
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+    }
     return (
         <div className='container_form_penilaian'>
-            {console.log(rows.filter(value =>
-                value.kelas === kelasSelected && value.jurusan === jurusanSelected
-            ))}
-            {console.log(data)}
 
             <div className='container_wrapper_padding_content'>
-                <TitlePage title="Form Penilaian Mata Pelajaran" />
-                <div className='container_content_form_penilaian'>
-                    <form>
-                        {/* Opsi Kelas */}
-                        <label htmlFor='kelas' className='label_form_penilaian' style={{ marginTop: '20px' }} >Kelas</label>
-                        <select name='kelas' id='kelas' className='input_form_penilaian' defaultValue="PILIH KELAS" onChange={(e) => setKelasSelected(e.target.value)}>
-                            {kelas.map((value) => {
-                                return <option
+                <form>
+                    {/* Opsi Kelas */}
+                    <label htmlFor='kelas' className='label_form_penilaian'  >Kelas</label>
+                    <select name='kelas' id='kelas' className='input_form_penilaian' defaultValue="PILIH KELAS" onChange={(e) => setKelasSelected(e.target.value)}>
+                        {kelas.map((value) => {
+                            return <option
+                                disabled={value.disabled || false}
+                                key={value.id}
+                                value={value.kelas}
+                                className='option_form_penilaian'>
+                                {value.kelas}
+                            </option>
+                        })}
+                    </select>
+
+                    {/* OPSI JURUSAN */}
+                    <label htmlFor='jurusan' className='label_form_penilaian'>Jurusan</label>
+                    <select name='jurusan' id='jurusan' className='input_form_penilaian' defaultValue="PILIH JURUSAN" onChange={(e) => setJurusanSelected(e.target.value)}>
+                        {jurusan.map((value) => {
+                            return (
+                                <option
                                     disabled={value.disabled || false}
                                     key={value.id}
-                                    value={value.kelas}
-                                    className='option_form_penilaian'>
-                                    {value.kelas}
+                                    value={value.jurusan}
+                                    className='option_form_penilaian'
+                                >
+                                    {value.jurusan}
                                 </option>
-                            })}
-                        </select>
+                            )
+                        })}
+                    </select>
 
-                        {/* OPSI JURUSAN */}
-                        <label htmlFor='jurusan' className='label_form_penilaian'>Jurusan</label>
-                        <select name='jurusan' id='jurusan' className='input_form_penilaian' defaultValue="PILIH JURUSAN" onChange={(e) => setJurusanSelected(e.target.value)}>
-                            {jurusan.map((value) => {
-                                return (
-                                    <option
-                                        disabled={value.disabled || false}
-                                        key={value.id}
-                                        value={value.jurusan}
-                                        className='option_form_penilaian'
-                                    >
-                                        {value.jurusan}
-                                    </option>
-                                )
-                            })}
-                        </select>
-
-                        {/* OPSI MAPEL */}
-                        {/* <label htmlFor='mata_pelajaran' className='label_form_penilaian'>Mata Pelajaran</label>
+                    {/* OPSI MAPEL */}
+                    {/* <label htmlFor='mata_pelajaran' className='label_form_penilaian'>Mata Pelajaran</label>
                         <select name='mata_pelajaran' id='mata_pelajaran' className='input_form_penilaian' defaultValue="PILIH MATA PELAJARAN" onChange={(e) => setMapelSelected(e.target.value)}>
                             {dataMapel.map((value) => {
                                 return (
@@ -256,15 +349,14 @@ const FormPenilaian = () => {
                                 )
                             })}
                         </select> */}
-                    </form>
-                </div>
+                </form>
 
                 <Paper sx={{ width: '100%' }}>
                     <TableContainer sx={{ maxHeight: 440 }}>
                         <Table stickyHeader aria-label="sticky table">
-                            <TableHead >
-                                <TableRow >
-                                    {columns.map((column) => (
+                            <TableHead>
+                                <TableRow>
+                                    {columns.map((column) => [
                                         <TableCell
                                             key={column.id}
                                             align={column.align}
@@ -273,7 +365,7 @@ const FormPenilaian = () => {
                                         >
                                             {column.label}
                                         </TableCell>
-                                    ))}
+                                    ])}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -286,11 +378,12 @@ const FormPenilaian = () => {
                                                 </div>
                                             </TableCell>
                                         </TableRow>) : error ?
-                                            (<TableRow>
+                                            (
                                                 <TableCell colSpan={columns.length}>
                                                     <Alert severity="error">{error}</Alert>
                                                 </TableCell>
-                                            </TableRow>) :
+                                            )
+                                            :
                                             (filteredRows
                                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                                 .map((row, index) => (
@@ -299,41 +392,38 @@ const FormPenilaian = () => {
                                                             const value = row[column.id];
                                                             return (
                                                                 <TableCell key={column.id} align={column.align}>
-                                                                    {column.id === 'mapel' ?
-                                                                        (<>
-                                                                            <select name='mata_pelajaran' id={value} className='input_form_penilaian_mapel' defaultValue={dataMapel[0].id} onChange={(e) => setMapelSelected(e.target.value)}>
-                                                                                {dataMapel.map((value) => {
-                                                                                    return (
-                                                                                        <option
-                                                                                            disabled={value.disabled || false}
-                                                                                            key={value.id}
-                                                                                            value={value.id}
-                                                                                            className='option_form_penilaian'
-                                                                                        >
-                                                                                            {value.mapel}
-                                                                                        </option>
-                                                                                    )
-                                                                                })}
-                                                                            </select>
-                                                                        </>)
-                                                                        : column.id === 'action' ?
+                                                                    {
+                                                                        column.id === 'action' ?
                                                                             (<>
                                                                                 <Button
                                                                                     // startIcon={<DeleteIcon />}
                                                                                     variant="contained"
-                                                                                    color='primary'
+                                                                                    color="success"
+                                                                                    size='small'
                                                                                     style={{ marginRight: '8px' }}
+                                                                                    onClick={() => handleOpenAdd(row.idSiswa)}
                                                                                 >
                                                                                     Add
                                                                                 </Button>
                                                                                 <Button
                                                                                     // startIcon={<DeleteIcon />}
                                                                                     variant="contained"
-                                                                                    color="success"
-                                                                                    onClick={() => handleOpen(row.idSiswa)}
+                                                                                    color='primary'
+                                                                                    size='small'
+                                                                                    style={{ marginRight: '8px' }}
+                                                                                    onClick={() => handleOpenEdit(row.idPenilaian)}
                                                                                 >
-                                                                                    {console.log(row.idSiswa)}
                                                                                     Edit
+                                                                                </Button>
+                                                                                <Button
+                                                                                    // startIcon={<DeleteIcon />}
+                                                                                    variant="contained"
+                                                                                    color='error'
+
+                                                                                    size='small'
+                                                                                    onClick={() => handleOpen(row.idPenilaian)}
+                                                                                >
+                                                                                    Delete
                                                                                 </Button>
                                                                             </>)
                                                                             :
@@ -343,10 +433,17 @@ const FormPenilaian = () => {
                                                             )
                                                         })}
                                                     </TableRow>
-                                                ))) :
-                                    (<TableCell colSpan={columns.length}>
-                                        <Alert severity="error">Isikan Form Terlebih Dahulu</Alert>
-                                    </TableCell>)}
+                                                )))
+                                    :
+                                    (
+                                        <TableRow>
+                                            <TableCell colSpan={columns.length}>
+                                                <Alert severity="error">Isikan Form Terlebih Dahulu</Alert>
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                }
+
                             </TableBody>
                         </Table>
                     </TableContainer>
@@ -359,43 +456,61 @@ const FormPenilaian = () => {
                         onPageChange={handleChangePage}
                         onRowsPerPageChange={handleChangeRowsPerPage}
                     />
-                    <Dialog
+                    <ConfirmationDialog
                         open={open}
                         onClose={handleClose}
-                        PaperProps={{
-                            component: 'form',
-                            // onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-                            //     event.preventDefault();
-                            //     const formData = new FormData(event.currentTarget);
-                            //     const formJson = Object.fromEntries((formData as any).entries());
-                            //     const email = formJson.email;
-                            //     console.log(email);
-                            //     handleClose();
-                            // },
-                        }}
+                        onConfirm={handleDelete}
+                        dialogTitle={"Konfirmasi Hapus!!"}
+                        dialogContent={"Apakah anda yakin ingin menghapus data ini?"}
+                    />
+
+                    {/* Dialog untuk Edit */}
+                    <Dialog
+                        open={openEdit}
+                        onClose={handleClose}
                     >
-                        <DialogTitle>Subscribe</DialogTitle>
+                        <DialogTitle>Edit Data Penilaian</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                To subscribe to this website, please enter your email address here. We
-                                will send updates occasionally.
+                                Update Nilai Siswa By Mata Pelajaran
                             </DialogContentText>
-                            <TextField
-                                autoFocus
-                                required
-                                margin="dense"
-                                id="name"
-                                name="email"
-                                label="Email Address"
-                                type="email"
-                                fullWidth
-                                variant="standard"
+
+                            <input
+                                type='number'
+                                style={{ width: '100%', marginTop: '10px', height: '40px' }}
+                                placeholder='Masukkan Nilai'
+                                onChange={e => setEditNilai(e.target.value)}
+                                value={editNilai || ''}
                             />
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleClose}>Cancel</Button>
-                            <Button type="submit">Subscribe</Button>
-                            {console.log("button clicked, siswa id:", siswaId, "and mapel:", mapelSelected)}
+                            <Button type="submit" onClick={handleSubmitEdit}>Submit</Button>
+                        </DialogActions>
+                    </Dialog>
+
+                    {/* Dialog untuk Add data nilai */}
+                    <Dialog
+                        open={openAdd}
+                        onClose={handleClose}
+                    >
+                        <DialogTitle>Tambahkan Nilai Siswa</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Tambah nilai siswa sesuai tugas yang dikerjakan
+                            </DialogContentText>
+
+                            <input
+                                type='number'
+                                style={{ width: '100%', marginTop: '10px', height: '40px' }}
+                                placeholder='Masukkan Nilai'
+                                onChange={e => setAddNilai(e.target.value)}
+                                value={addNilai || ''}
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose}>Cancel</Button>
+                            <Button type="submit" onClick={handleSubmitAdd}>Submit</Button>
                         </DialogActions>
                     </Dialog>
                 </Paper >

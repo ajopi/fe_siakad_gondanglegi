@@ -125,13 +125,36 @@ const handleDeleteSiswa = (id) => {
         });
 
 }
+
+const handleDeletePenilaian = (id) => {
+    let config = {
+        method: 'delete',
+        maxBodyLength: Infinity,
+        url: `${process.env.REACT_APP_BASE_URL}/api/v1/penilaian/${id}/delete`,
+        headers: {
+            'x-access-token': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    };
+
+    axios.request(config)
+        .then((response) => {
+            console.log(response.data);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
+}
 const authServices = {
     loginUser,
     logoutUser,
     handleDeleteSurat,
     handleDeleteAktivitas,
     handleDeleteGuru,
-    handleDeleteSiswa
+    handleDeleteSiswa,
+    handleDeletePenilaian
 }
 
 export default authServices

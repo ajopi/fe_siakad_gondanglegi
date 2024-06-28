@@ -1,0 +1,60 @@
+.container_card_mapel {
+    display: flex;
+    flex-direction: column;
+
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 12px;
+    max-height: 79vh;
+    overflow-y: auto;
+}
+
+.container_content_card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    
+    gap: 16px;
+    /* background-color: aqua; */
+}
+
+.card_mapel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    text-align: center;
+    width: 200px;
+    height: 130px;
+    padding: 12px;
+    border: 1px solid black;
+    border-radius: 12px;
+    color: black;
+    font-weight: bold;
+    font-family: 'Poppins';
+    transition: all 0.5s;
+
+    background-color: rgb(184, 222, 255);
+    cursor: pointer;
+
+}
+
+.card_mapel:hover {
+    transform: scale(1.1);
+}
+
+.btn_pilih_mapel {
+    border-radius: 12px;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    font-family: 'Poppins';
+    background-color: rgb(0, 85, 255);
+    border: none;
+}
+
+.span_mapel {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
