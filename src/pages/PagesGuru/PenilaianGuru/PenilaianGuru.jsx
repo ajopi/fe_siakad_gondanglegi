@@ -3,12 +3,10 @@ import './PenilaianGuru.css'
 import NavbarDefault from '../../../components/NavbarDefault/NavbarDefault'
 import SidebarDefault from '../../../components/SidebarDefault/SidebarDefault'
 import TitlePageAndButton from '../../../components/TitlePageAndButton/TitlePageAndButton'
-import FormPenilaian from '../../../components/FormPenilaian/FormPenilaian'
 import { Alert, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchDataApi } from '../../../redux/slice/getDataSlice'
 import CardMapel from '../../../components/CardMapel/CardMapel'
-import { useNavigate } from 'react-router-dom'
 
 const PenilaianGuru = () => {
   const dispatch = useDispatch();

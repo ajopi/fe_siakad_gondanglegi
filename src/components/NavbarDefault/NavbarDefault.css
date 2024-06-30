@@ -3,6 +3,7 @@
     flex-direction: row;
     background-color: rgba(153, 0, 0, 1);
     padding: 12px;
+    align-items: center;
 }
 
 .container_content_navbar1{
@@ -48,4 +49,17 @@
     font-weight: bold;
     margin: 0px 0px 0px 0px;
     color: rgba(248, 237, 255, 1);
+}
+
+.btn_logout{
+    font-family: 'Poppins';
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 12px;
+    margin-left: 20px;
+}
+
+.btn_logout:hover{
+    background-color: rgba(248, 237, 255, 1);
+    color: rgba(153, 0, 0, 1);
 }

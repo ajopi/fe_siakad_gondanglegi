@@ -19,6 +19,7 @@ const LoginPage = () => {
     try {
       authServices.loginUser(username, password).then(() => {
         console.log("login success!");
+        console.log(JSON.parse(sessionStorage.getItem("user")))
         const access_level = parseInt(sessionStorage.getItem("accessLevel"));
 
         if (access_level === 1) {

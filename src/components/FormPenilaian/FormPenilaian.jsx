@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './FormPenilaian.css'
-import TitlePage from '../TitlePageAndButton/TitlePage/TitlePage'
-import { Alert, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField } from '@mui/material'
+import { Alert, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchDataApi } from '../../redux/slice/getDataSlice'
 import authServices from '../../Services/auth.services'
@@ -56,60 +55,6 @@ const FormPenilaian = ({ typeMapel }) => {
         }
     ]
 
-    const dataMapel = [
-        {
-            id: 0,
-            mapel: "PILIH MATA PELAJARAN",
-            disabled: true,
-            defaultValue: "PILIH MATA PELAJARAN"
-        },
-        {
-            id: 1,
-            mapel: "PENDIDIKAN AGAMA DAN BUDI PEKERTI",
-            fontSize: '10px'
-        },
-        {
-            id: 2,
-            mapel: "PENDIDIKAN PANCASILA DAN KEWARGANEGARAAN"
-        },
-        {
-            id: 3,
-            mapel: "BAHASA INDONESIA"
-        },
-        {
-            id: 4,
-            mapel: "SEJARAH"
-        },
-        {
-            id: 5,
-            mapel: "SENI BUDAYA"
-        },
-        {
-            id: 6,
-            mapel: "PJOK"
-        },
-        {
-            id: 7,
-            mapel: "KEMUHAMMADIYAHAN"
-        },
-        {
-            id: 8,
-            mapel: "BAHASA ARAB"
-        },
-        {
-            id: 9,
-            mapel: "MATEMATIKA KEJURUAN"
-        },
-        {
-            id: 10,
-            mapel: "INFORMATIKA"
-        },
-        {
-            id: 11,
-            mapel: "PROYEK IPAS"
-        }
-    ]
-
 
     const columns = [
         {
@@ -150,7 +95,6 @@ const FormPenilaian = ({ typeMapel }) => {
 
     // ======================GET DATA SISWA BY INPUT======================
     const [rows, setRows] = useState([]);
-    const [raport, setRaport] = useState([]);
     useEffect(() => {
         dispatch(fetchDataApi())
     }, [dispatch]);
@@ -183,8 +127,6 @@ const FormPenilaian = ({ typeMapel }) => {
         (kelasSelected === "" || value.kelas === kelasSelected) &&
         (jurusanSelected === "" || value.jurusan === jurusanSelected)
     )
-    // filtered mapel type
-    const filteredMapel = dataMapel.filter((item) => (item.mapel !== 'PILIH MATA PELAJARAN'));
 
 
     //STATE n FUnction FOR TABLE
